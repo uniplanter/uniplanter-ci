@@ -1,0 +1,23 @@
+---
+
+- name: Run common role.
+  hosts:
+    - all
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+  tags:
+    - common
+
+- name: Run docker role.
+  hosts:
+    - all
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  roles:
+    - docker
+  tags:
+    - docker

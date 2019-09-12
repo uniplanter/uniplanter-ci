@@ -1,0 +1,12 @@
+---
+
+- name: Run common role.
+  hosts:
+    - postgres
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  roles:
+    - postgres
+  tags:
+    - postgres 

@@ -1,0 +1,44 @@
+---
+
+- name: Make sure a service is running
+  systemd:
+    state: started
+    name: "docker"
+    enabled: yes
+  tags: registry-ui
+
+- name: Check if the /var/registry-ui directory exists.
+  file:
+    path: /var/registryi-ui
+    state: directory
+    mode: 0755
+    recurse: yes
+  tags: registry-ui
+
+- name: Starting registry-ui
+  docker_container:
+    name: registry-ui
+#    insecure_registry: true
+    image: "parabuzzle/docker-registry-ui"
+    restart_policy: always
+#    memory: "1024MB"
+    state: started
+    restart: yes
+    pull: yes
+    exposed_ports:
+      - "{{ registry_ui_port }}"
+    ports:
+      - "0.0.0.0:{{ registry_ui_port }}:80/tcp"
+    env:
+        REGISTRY_HOST: "{{ registry_ip }}"
+        REGISTRY_PORT: "{{ registry_port }}"
+        REGISTRY_PROTOCOL: http
+#        SSL_VERIFY: false
+#        ALLOW_REGISTRY_LOGIN: true
+#        REGISTRY_ALLOW_DELETE: true
+        USERNAME: "{{ registry_ui_username }}"
+        PASSWORD: "{{ registry_ui_password }}"
+    volumes:
+      "/var/registry_ui:/var/lib/h2"
+  tags: registry-ui
+

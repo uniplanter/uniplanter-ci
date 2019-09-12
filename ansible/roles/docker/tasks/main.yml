@@ -1,0 +1,22 @@
+---
+
+- name: Install Docker packages.
+  include_tasks: pkg.yml
+  tags:
+    - docker
+
+- name: Copy docker configuration.
+  template:
+    src: docker.j2
+    dest: /etc/sysconfig/docker
+  notify: restart docker
+  tags:
+    - docker
+
+- name: Copy a daemon.json file for docker.
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+  notify: restart docker
+  tags:
+    - docker

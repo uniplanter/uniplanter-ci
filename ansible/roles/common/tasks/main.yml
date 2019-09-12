@@ -1,0 +1,47 @@
+---
+
+- name: Install commons packages.
+  include_tasks: pkg.yml
+  tags:
+    - common
+    - pkg 
+
+- name: Ensure hostname set.
+  hostname:
+    name: "{{ inventory_hostname }}"
+  tags:
+    - common
+
+- name: Include NTP configuration.
+  include_tasks: ntp.yml
+  tags:
+    - common
+    - ntp
+
+- name: Disable firewall.
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+  tags:
+    - common
+
+- name: Disable SELinux.
+  selinux:
+    state: disabled
+  tags:
+    - common
+
+- name: Set ip forwarding on in /proc and in the sysctl file and reload if necessary.
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+  tags:
+    - common
+
+- name: reboot host
+  shell: /sbin/shutdown -r now
+  tags: [ 'never', 'reboot' ]

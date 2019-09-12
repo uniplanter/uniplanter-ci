@@ -1,0 +1,12 @@
+---
+
+- name: Run common role.
+  hosts:
+    - jenkins
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  roles:
+    - jenkins
+  tags:
+    - jenkins 

@@ -1,0 +1,29 @@
+---
+
+- name: Make sure a service is running
+  systemd:
+    state: started
+    name: "docker"
+    enabled: yes
+  tags: registry
+
+- name: Create the registry_home directory
+  file:
+    path: "{{ registry_data_dir }}"
+    state: directory
+    mode: 0777
+  tags: registry
+
+- name: Starting registry 
+  docker_container:
+    name: registry
+    image: "{{ registry_image_name }}:{{ registry_image_version }}"
+    restart_policy: always
+    state: started
+    restart: yes
+    pull: yes
+    ports:
+      - "0.0.0.0:{{ registry_port }}:{{ registry_port }}/tcp"
+    volumes:
+        "{{ registry_data_dir }}:/var/lib/registry"
+  tags: registry

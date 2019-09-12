@@ -1,0 +1,46 @@
+---
+
+- name: Make sure a service is running
+  systemd:
+    state: started
+    name: "docker"
+    enabled: yes
+  tags: jenkins
+
+#- name: Checking permission of the docker.sock file
+#  file:
+#    path: /var/run/docker.sock
+#    state: file
+#    mode: "u=rw,g=rw,o=rw"
+#  tags: jenkins
+
+
+- name: Checking permission of the docker.sock file
+  cron:
+    name: "docker.sock"
+    minute: "*"
+    job: "chmod 777 /var/run/docker.sock"
+
+- name: Create the jenkins_home directory
+  file:
+    path: "{{ jenkins_home_dir }}"
+    state: directory
+    mode: 0777
+  tags: jenkins
+
+- name: Starting Jenkins 
+  docker_container:
+    name: jenkins
+    image: "{{ registry_ip }}:{{ registry_port }}/jenkins:{{ jenkins_version }}"
+    restart_policy: always
+    state: started
+    restart: yes
+    pull: yes
+    ports:
+      - "0.0.0.0:{{ jenkins_external_port }}:{{ jenkins_internal_port }}/tcp"
+    env:
+        JAVA_OPTS: "-Dmail.smtp.starttls.enable=true"
+    volumes:
+      - "{{ jenkins_home_dir }}:{{ jenkins_home_dir }}"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+  tags: jenkins

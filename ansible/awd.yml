@@ -1,0 +1,23 @@
+---
+
+- name: Run frontend role.
+  hosts:
+    - awd
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  roles:
+    - awd/frontend
+  tags:
+    - frontend
+
+- name: Run backend role.
+  hosts:
+    - awd
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  roles:
+    - awd/backend
+  tags:
+    - backend 

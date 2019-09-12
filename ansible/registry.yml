@@ -1,0 +1,13 @@
+---
+
+- name: Run common role.
+  hosts:
+    - registry
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  roles:
+    - registry
+    - registry-ui
+  tags:
+    - registry 

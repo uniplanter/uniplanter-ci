@@ -1,0 +1,20 @@
+---
+
+- name: Make sure a service is running
+  systemd:
+    state: started
+    name: "docker"
+    enabled: yes
+  tags: frontend
+
+- name: Starting frontend 
+  docker_container:
+    name: frontend
+    image: "{{ registry_ip }}:{{ registry_port }}/frontend:{{ frontend_version }}"
+    restart_policy: always
+    state: started
+    restart: yes
+    pull: yes
+    ports:
+      - "0.0.0.0:{{ frontend_port }}:{{ frontend_port }}/tcp"
+  tags: frontend

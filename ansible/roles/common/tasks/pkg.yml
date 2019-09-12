@@ -1,0 +1,31 @@
+---
+
+- name: Install the epel-release repo.
+  yum:
+    name: "epel-release"
+    state: present
+  tags:
+    - common
+    - pkg
+
+- name: Install system packages.
+  yum:
+    state: present
+    name:
+      - libselinux-python
+      - python-yaml
+      - net-tools
+      - bind-utils
+      - nfs-utils
+      - mc
+      - vim
+      - wget
+      - git
+      - ntp
+      - telnet
+      - mtr
+      - htop
+      - iotop
+  tags:
+    - common
+    - pkg

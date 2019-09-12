@@ -1,0 +1,8 @@
+---
+
+db_host:		'*'
+db_data_dir:		'/var/postgres'
+db_connection:          'pgsql'
+
+db_image_version:	'11.5'
+db_inamge_name:		'postgres'

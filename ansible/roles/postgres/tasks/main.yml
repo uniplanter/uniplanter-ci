@@ -1,0 +1,35 @@
+---
+
+- name: Make sure a service is running
+  systemd:
+    state: started
+    name: "docker"
+    enabled: yes
+  tags: postgres
+
+- name: Create the postgres home directory
+  file:
+    path: "{{ db_data_dir }}"
+    state: directory
+    mode: 0777
+  tags: postgres
+
+- name: Starting postgres 
+  docker_container:
+    name: postgres
+    image: "{{ db_inamge_name }}:{{ db_image_version }}"
+    restart_policy: always
+    state: started
+    restart: yes
+    pull: yes
+    env:
+      DB_CONNECTION: "{{ db_connection }}"
+      DB_HOST: "{{ db_host }}"
+      POSTGRES_USER: "{{ db_user }}"
+      POSTGRES_PASSWORD: "{{ db_pass }}"
+    ports:
+      - "0.0.0.0:{{ db_port }}:{{ db_port }}/tcp"
+    volumes:
+        "{{ db_data_dir }}:/var/lib/postgresql/data"
+  tags: postgres
+

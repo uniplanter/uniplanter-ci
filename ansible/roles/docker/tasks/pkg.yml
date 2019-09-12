@@ -1,0 +1,41 @@
+---
+
+- name: Add Docker yum repository
+  yum_repository:
+    name: docker-ce-stable
+    description: Docker CE Stable - $basearch
+    file: docker-ce-stable
+    baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+  tags:
+    - docker
+
+- name: Install docker engine (RHEL/CentOS)
+  yum:
+    name: ["docker-ce", "docker-ce-cli", "containerd.io"]
+    state: present
+  tags:
+    - docker
+
+- name: Make sure if the service is running.
+  systemd:
+    state: started
+    name: docker
+    enabled: yes
+  tags:
+    - docker
+
+- name: Update repositories cache and install "python-pip" package
+  yum:
+    name: python-pip
+    update_cache: yes
+  tags:
+    - docker
+
+- name: Install python module
+  pip:
+    name: ['docker', 'docker-compose']
+  tags:
+    - docker
