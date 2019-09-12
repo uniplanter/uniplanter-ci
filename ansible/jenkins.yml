@@ -1,6 +1,6 @@
 ---
 
-- name: Run common role.
+- name: Run jenkins role.
   hosts:
     - jenkins
   gather_facts: true

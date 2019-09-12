@@ -1,6 +1,6 @@
 ---
 
-- name: Run common role.
+- name: Run postgres role.
   hosts:
     - postgres
   gather_facts: true

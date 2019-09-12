@@ -1,6 +1,6 @@
 ---
 
-- name: Run common role.
+- name: Run registry role.
   hosts:
     - registry
   gather_facts: true
